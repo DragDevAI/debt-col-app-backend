@@ -34,6 +34,7 @@ module.exports = {
   "POST /cart/": ["admin", "user"],
   "PUT /cart/:id/add": ["admin", "user"],
   "PUT /cart/:id/remove": ["admin", "user"],
+  "PUT /cart/:id/pay": ["admin", "user"],
   "DELETE /cart/:id": ["admin", "user"],
 
 };

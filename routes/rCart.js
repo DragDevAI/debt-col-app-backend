@@ -13,6 +13,7 @@ router.get('/getId/:userID', verifyJWT, isAuthorised, controller.getIdByKey);
 router.get('/:id', verifyJWT, isAuthorised, controller.getCartByIdNo);
 router.put('/:id/add', verifyJWT, isAuthorised, controller.updateCartAdd);
 router.put('/:id/remove', verifyJWT, isAuthorised, controller.updateCartRemove);
+router.put('/:id/pay', verifyJWT, isAuthorised, controller.updatePaymentStatus);
 router.delete('/:id', verifyJWT, isAuthorised, controller.deleteCart);
 
 module.exports = router;

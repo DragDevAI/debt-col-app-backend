@@ -111,29 +111,11 @@ exports.updateCartRemove = (req, res, next) => {
     //const {index} = req.body;
     const { itemId } = req.body; // Remove by itemId
 
-    /*
-    if (index < 0 || index >= cart.products.length) {
-        return res.status(400).json({ message: `Invalid index: ${index}` });
-    };
-    */
-
     Cart.findById(id)
         .then(cart => {
             if (!cart) {
                 return res.status(404).json({ message: `Cart ${id} not found!` });
             }
-
-            /*
-            // Get the item being removed
-            const removed = cart.products.splice(index, 1)[0];
-
-            if (!removed) {
-                return res.status(400).json({ message: `Invalid index: ${index}` });
-            }
-
-            // Update the total price
-            cart.totalPrice -= removed.unitPrice * removed.quantity;
-            */
 
             const itemIndex = cart.products.findIndex(p => p._id.toString() === itemId);
             if (itemIndex === -1) {
@@ -148,6 +130,37 @@ exports.updateCartRemove = (req, res, next) => {
         })
         .then(result => {
             res.status(200).json({ message: `Cart ${id} updated!`, cart: result });
+        })
+        .catch(err => console.log(err));
+};
+
+// Update - PUT: set() and save()
+exports.updatePaymentStatus = (req, res, next) => {
+    const { id } = req.params;
+
+    // Checking to make sure at least one field to products
+    if (Object.keys(product).length === 0) {
+        return res.status(400).json({ message: 'Update request empty' });
+    };
+    // Clean up and remove properties with 'null' or 'undefined' values from update object
+    for (const key in product) {
+        if (product[key] === null || product[key] === undefined) {
+            delete product[key];
+        };
+    };
+
+    Cart.findById(id)
+        .then(cart => {
+            if (!cart) {
+                return res.status(404).json({ message: `Cart ${id} not found!` });
+            }
+            if (cart.paymentStatus===false) {
+                cart.paymentStatus = true;
+            }
+            return cart.save();
+        })
+        .then(result => {
+            res.status(200).json({ message: `Cart ${id} paid!`, cart: result });
         })
         .catch(err => console.log(err));
 };
